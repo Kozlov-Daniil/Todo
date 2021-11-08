@@ -1,0 +1,159 @@
+﻿@page "/edit"
+
+
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Редактирование задания</th>
+                    </tr>
+                </thead>
+
+            </table>
+            <div class="row mt-4">
+                <div class="col">
+                    <select class="col-12">
+                        <option>Сканирование компьютера</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row no-gutters mt-4">
+                <div class="col-2">
+                    <p class="text">Название задачи:</p>
+                </div>
+                <div class="col">
+                    <input class="form-control " placeholder="Планировщик задач" @bind="EditTodo" />
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-4">
+                    <p>Запуск задачи</p>
+                    <input type="radio" /> Однократно при запуске системы <br />
+                    <input type="radio"  @onchange="(() => Odn = !Odn)" /> Однократно <br />
+                    <input type="radio" @onchange="(() => Mnog = !Mnog)" /> Многократно <br />
+                    <input type="radio" /> Ежедневно <br />
+                    <input type="radio" @onchange="(() => Ezg = !Ezg)" /> Еженедельно
+                </div>
+                
+                <div class="col-4">
+                    @if (Ezg)
+                    {
+                        <form>
+                            <p>
+                                <label for="localdate">Время выполнения задачи:</label><br />
+                                <input type="datetime-local" id="localdate" name="date" />
+                            </p>
+                        </form>
+                        }
+                    </div>
+                    <div class="col-4 ">
+                        @if (Odn)
+                        {
+                        <form>
+                            <label for="localdate">Дата и время запуска:</label><br />
+                            <input type="datetime-local" id="localdate" name="date" />
+                        </form>
+                        }
+                        @if (Mnog)
+                        { 
+                        <form>
+                            <label for="localdate">Интервал между запусками задачи (мин):</label><br />
+                            <input type="text" id="text" name="interval" />
+                        </form>
+                        }
+                       @if (Ezg)
+                       { 
+                        <form>
+                            
+                            День недели:<br />
+                            <select class="mt-2">
+                                <option>Понедельник</option>
+                                <option>Вторник</option>
+                                <option>Среда</option>
+                                <option>Четверг</option>
+                                <option>Пятница</option>
+                                <option>Суббота</option>
+                                <option>Воскресенье</option>
+                            </select>
+                        </form>
+                        }
+                    </div>
+                </div>
+                
+                
+            <div class="row">
+                <table class="table table-striped">
+                    <thead class="table">
+                        <tr>
+                            <th scope="col">Объекты сканирования</th>
+                        </tr>
+                    </thead>
+
+                </table>
+                <div class="col-6">
+                    <input type="checkbox" /> Загрузочные секттры <br />
+                    <input type="checkbox" /> Локальные диски <br />
+                    <input type="checkbox" /> Съёмные диски <br />
+                </div>
+                <div class="col-6">
+                    <input type="checkbox" /> Система<br />
+                    <input type="checkbox" /> Список <br />
+                    <input type="checkbox" /> Оперативная память<br />
+                </div>
+            </div>
+            <table class="table table-secondary">
+                <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Директории и файлы</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>  C:/Users/admin/</td>
+                    </tr>
+                </tbody>
+
+            </table>
+            <div class="btn-group mt-1" role="group" arial-label="Basic exapmple">
+                <div class="col">
+                    <button class="btn-dark" @onclick="AddTodo">Добавить</button>
+
+                    <button class="btn-dark">Редактировать</button>
+
+                    <button class="btn-dark">Удалить</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool  Mnog { get; set; } = false;
+    [Parameter] public bool  Ezg { get; set; } = false;
+    [Parameter] public bool  Odn { get; set; } = false;
+
+    private string EditTodo;
+
+    private IList<TodoItem> todos = new List<TodoItem>();
+
+    private string newTodo;
+
+    public void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(new TodoItem { Title = newTodo });
+            newTodo = string.Empty;
+        }
+    }
+
+    private void DeleteTodo(TodoItem deletedItem)
+    {
+        todos.Remove(deletedItem);
+    }
+}
