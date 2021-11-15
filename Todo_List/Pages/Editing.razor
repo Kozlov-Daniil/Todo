@@ -32,45 +32,48 @@
             <div class="row mt-3">
                 <div class="col-4">
                     <p>Запуск задачи</p>
-                    <input type="radio" /> Однократно при запуске системы <br />
-                    <input type="radio"  @onchange="(() => Odn = !Odn)" /> Однократно <br />
-                    <input type="radio" @onchange="(() => Mnog = !Mnog)" /> Многократно <br />
-                    <input type="radio" /> Ежедневно <br />
-                    <input type="radio" @onchange="(() => Ezg = !Ezg)" /> Еженедельно
+                    <input type="radio" name="time" /> Однократно при запуске системы <br />
+                    <input type="radio" name="time" value="2" checked="@(selectGroup == 2)"  @onclick="@(()=>selectGroup = 2)" /> Однократно <br />
+                    <input type="radio" name="time" value="3" checked="@(selectGroup == 3)" @onclick="@(() => selectGroup = 3)" /> Многократно <br />
+                    <input type="radio" name="time" /> Ежедневно <br />
+                    <input type="radio" name="time" value="5" checked="@(selectGroup == 5)" @onclick="@(() => selectGroup = 5 )" /> Еженедельно
                 </div>
                 
-                <div class="col-4">
-                    @if (Ezg)
+                <div class="col-4" id="form">
+                    @if (selectGroup==5)
                     {
-                        <form>
+                        <form id="0">
                             <p>
                                 <label for="localdate">Время выполнения задачи:</label><br />
                                 <input type="datetime-local" id="localdate" name="date" />
                             </p>
                         </form>
-                        }
+                    }
+                    else if (selectGroup==2)
+                    {
+                   
+                <form id="1">
+                    <label for="localdate">Дата и время запуска:</label><br />
+                    <input type="datetime-local" id="localdate" name="date" class="odnoc"/>
+                </form>
+                    }
+                    else if (selectGroup==3)
+                    {
+                <form id="2">
+                    <label for="localdate">Интервал между запусками задачи (мин):</label><br />
+                    <input type="text" id="text" name="interval" class="mnogoc" />
+                </form>
+                    }
                     </div>
-                    <div class="col-4 ">
-                        @if (Odn)
-                        {
-                        <form>
-                            <label for="localdate">Дата и время запуска:</label><br />
-                            <input type="datetime-local" id="localdate" name="date" />
-                        </form>
-                        }
-                        @if (Mnog)
-                        { 
-                        <form>
-                            <label for="localdate">Интервал между запусками задачи (мин):</label><br />
-                            <input type="text" id="text" name="interval" />
-                        </form>
-                        }
-                       @if (Ezg)
+                    <div class="col-4 " id="form">
+                        
+                       
+                       @if (selectGroup==5)
                        { 
-                        <form>
+                        <form class="mt-2">
                             
                             День недели:<br />
-                            <select class="mt-2">
+                            <select class="nedel">
                                 <option>Понедельник</option>
                                 <option>Вторник</option>
                                 <option>Среда</option>
@@ -133,9 +136,10 @@
 </div>
 
 @code {
-    [Parameter] public bool  Mnog { get; set; } = false;
-    [Parameter] public bool  Ezg { get; set; } = false;
-    [Parameter] public bool  Odn { get; set; } = false;
+
+
+   private int selectGroup = 0;
+
 
     private string EditTodo;
 
